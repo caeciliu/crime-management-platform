@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>城市犯罪管理平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme_crime_platform.css">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            background-color: var(--background) !important;
+            color: var(--foreground) !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary) !important;
+            color: var(--primary-foreground) !important;
+            border-radius: var(--radius) !important;
+            transition: all 200ms ease !important;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: var(--shadow-md) !important;
+        }
+        
+        .card {
+            background-color: var(--card) !important;
+            color: var(--card-foreground) !important;
+            border-radius: var(--radius) !important;
+            box-shadow: var(--shadow-sm) !important;
+            border: 1px solid var(--border) !important;
+        }
+        
+        .input-field {
+            background-color: var(--input) !important;
+            border-color: var(--border) !important;
+            color: var(--foreground) !important;
+            border-radius: var(--radius-sm) !important;
+        }
+        
+        .table-header {
+            background-color: var(--secondary) !important;
+            color: var(--secondary-foreground) !important;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-closed {
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
+        
+        .severity-high {
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+        
+        .severity-medium {
+            background-color: #fffbeb;
+            color: #d97706;
+        }
+        
+        .severity-low {
+            background-color: #eff6ff;
+            color: #2563eb;
+        }
+        
+        .animate-pop-in {
+            animation: popIn 400ms ease-out;
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 400ms ease-out;
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            0% { transform: translateY(30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        .hover-lift {
+            transition: transform 200ms ease, box-shadow 200ms ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-background text-foreground">
+    <!-- Header -->
+    <header class="bg-card border-b border-border shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                            <i data-lucide="shield" class="w-5 h-5 text-primary-foreground"></i>
+                        </div>
+                        <h1 class="text-xl font-bold text-foreground">城市犯罪管理平台</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="p-2 hover:bg-muted rounded-lg transition-colors">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                    </button>
+                    <button class="p-2 hover:bg-muted rounded-lg transition-colors">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Search Section -->
+        <div class="card mb-6 p-6">
+            <h2 class="text-lg font-semibold mb-4">搜索与筛选</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-muted-foreground mb-2">犯罪类型</label>
+                    <select class="input-field w-full px-3 py-2 border border-border focus:ring-2 focus:ring-primary outline-none transition-all">
+                        <option value="">全部类型</option>
+                        <option value="robbery">抢劫</option>
+                        <option value="theft">盗窃</option>
+                        <option value="assault">袭击</option>
+                        <option value="fraud">诈骗</option>
+                        <option value="drug">毒品犯罪</option>
+                        <option value="vandalism">故意破坏</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-muted-foreground mb-2">时间范围</label>
+                    <select class="input-field w-full px-3 py-2 border border-border focus:ring-2 focus:ring-primary outline-none transition-all">
+                        <option value="today">今天</option>
+                        <option value="week">本周</option>
+                        <option value="month">本月</option>
+                        <option value="quarter">本季度</option>
+                        <option value="year">本年</option>
+                        <option value="custom">自定义</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-muted-foreground mb-2">区域</label>
+                    <select class="input-field w-full px-3 py-2 border border-border focus:ring-2 focus:ring-primary outline-none transition-all">
+                        <option value="">全部区域</option>
+                        <option value="downtown">市中心</option>
+                        <option value="east">东部区域</option>
+                        <option value="west">西部区域</option>
+                        <option value="north">北部区域</option>
+                        <option value="south">南部区域</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-muted-foreground mb-2">严重程度</label>
+                    <select class="input-field w-full px-3 py-2 border border-border focus:ring-2 focus:ring-primary outline-none transition-all">
+                        <option value="">全部级别</option>
+                        <option value="high">高</option>
+                        <option value="medium">中</option>
+                        <option value="low">低</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <button class="btn-primary px-4 py-2 flex items-center space-x-2 hover:shadow-lg transition-all">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                        <span>搜索</span>
+                    </button>
+                    <button class="px-4 py-2 text-sm text-muted-foreground hover:bg-muted rounded-lg transition-colors">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        <span>重置</span>
+                    </button>
+                </div>
+                <button class="px-4 py-2 text-sm text-primary hover:bg-primary/10 rounded-lg transition-colors flex items-center space-x-2">
+                    <i data-lucide="settings" class="w-4 h-4"></i>
+                    <span>高级筛选</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <div class="card p-6 hover-lift animate-pop-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">总案件数</p>
+                        <p class="text-2xl font-bold mt-1">1,234</p>
+                    </div>
+                    <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
+                        <i data-lucide="alert-triangle" class="w-6 h-6 text-primary"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-muted-foreground mt-2">本月新增 56 起</p>
+            </div>
+            
+            <div class="card p-6 hover-lift animate-pop-in" style="animation-delay: 0.1s">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">正在调查</p>
+                        <p class="text-2xl font-bold mt-1">452</p>
+                    </div>
+                    <div class="w-12 h-12 bg-yellow-400/20 rounded-lg flex items-center justify-center">
+                        <i data-lucide="loader" class="w-6 h-6 text-yellow-600"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-muted-foreground mt-2">平均处理时间 7.2 天</p>
+            </div>
+            
+            <div class="card p-6 hover-lift animate-pop-in" style="animation-delay: 0.2s">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">已破案件</p>
+                        <p class="text-2xl font-bold mt-1">728</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center">
+                        <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-muted-foreground mt-2">破案率 78.4%</p>
+            </div>
+            
+            <div class="card p-6 hover-lift animate-pop-in" style="animation-delay: 0.3s">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">高风险区域</p>
+                        <p class="text-2xl font-bold mt-1">12</p>
+                    </div>
+                    <div class="w-12 h-12 bg-red-400/20 rounded-lg flex items-center justify-center">
+                        <i data-lucide="map-pin" class="w-6 h-6 text-red-600"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-muted-foreground mt-2">需要重点关注</p>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="card">
+            <div class="px-6 py-4 border-b border-border">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold">犯罪案件列表</h3>
+                    <div class="flex items-center space-x-2">
+                        <button class="px-3 py-2 text-sm bg-muted text-muted-foreground rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors">
+                            <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                            导出数据
+                        </button>
+                        <button class="px-3 py-2 text-sm bg-muted text-muted-foreground rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors">
+                            <i data-lucide="map" class="w-4 h-4"></i>
+                            地图视图
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="table-header">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">案件编号</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">犯罪类型</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">时间</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">地点</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">严重程度</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">状态</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-border">
+                        <tr class="hover:bg-muted/50 transition-colors animate-slide-up" style="animation-delay: 0s">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">CR-2024-001234</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">抢劫</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">2024-01-15 14:30</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">市中心商业街</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge severity-high">高</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge status-pending">调查中</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <button class="text-primary hover:text-primary/80 font-medium">详情</button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-muted/50 transition-colors animate-slide-up" style="animation-delay: 0.1s">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">CR-2024-001235</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">盗窃</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">2024-01-15 10:15</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">东部住宅区</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge severity-medium">中</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge status-active">已立案</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <button class="text-primary hover:text-primary/80 font-medium">详情</button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-muted/50 transition-colors animate-slide-up" style="animation-delay: 0.2s">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">CR-2024-001236</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">故意破坏</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">2024-01-14 22:45</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">西部公园</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge severity-low">低</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge status-closed">已结案</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <button class="text-primary hover:text-primary/80 font-medium">详情</button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-muted/50 transition-colors animate-slide-up" style="animation-delay: 0.3s">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">CR-2024-001237</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">诈骗</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">2024-01-14 09:20</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">南部商业区</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge severity-medium">中</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge status-pending">调查中</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <button class="text-primary hover:text-primary/80 font-medium">详情</button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-muted/50 transition-colors animate-slide-up" style="animation-delay: 0.4s">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">CR-2024-001238</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">毒品犯罪</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">2024-01-13 18:10</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">北部娱乐区</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge severity-high">高</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge status-active">已立案</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <button class="text-primary hover:text-primary/80 font-medium">详情</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="px-6 py-4 border-t border-border">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm text-muted-foreground">
+                        显示 1 到 5 条，共 1,234 条记录
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button class="px-3 py-2 text-sm text-muted-foreground hover:bg-muted rounded-lg transition-colors">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                        </button>
+                        <button class="px-3 py-2 text-sm bg-primary text-primary-foreground rounded-lg">1</button>
+                        <button class="px-3 py-2 text-sm text-muted-foreground hover:bg-muted rounded-lg transition-colors">2</button>
+                        <button class="px-3 py-2 text-sm text-muted-foreground hover:bg-muted rounded-lg transition-colors">3</button>
+                        <button class="px-3 py-2 text-sm text-muted-foreground hover:bg-muted rounded-lg transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize lucide icons
+        lucide.createIcons();
+        
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Search button click animation
+            const searchBtn = document.querySelector('.btn-primary');
+            searchBtn.addEventListener('click', function() {
+                this.classList.add('transform', 'scale-95');
+                setTimeout(() => {
+                    this.classList.remove('transform', 'scale-95');
+                }, 150);
+            });
+            
+            // Table row click for detail view
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    const caseId = this.querySelector('td:first-child').textContent;
+                    alert(`查看案件详情: ${caseId}`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

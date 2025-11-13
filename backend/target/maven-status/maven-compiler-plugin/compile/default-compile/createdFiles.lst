@@ -1,0 +1,5 @@
+com\crime\management\backend\controller\CrimeEventController.class
+com\crime\management\backend\model\CrimeEvent.class
+com\crime\management\backend\service\CrimeEventService.class
+com\crime\management\backend\CrimeManagementApplication.class
+com\crime\management\backend\repository\CrimeEventRepository.class
