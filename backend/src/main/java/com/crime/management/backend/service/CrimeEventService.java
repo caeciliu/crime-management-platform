@@ -23,6 +23,10 @@ public class CrimeEventService {
         return crimeEventRepository.findAll();
     }
 
+    public long countAllEvents() {
+        return crimeEventRepository.count();
+    }
+
     public Page<CrimeEvent> getCrimeEventsPage(Pageable pageable) {
         return crimeEventRepository.findAll(pageable);
     }

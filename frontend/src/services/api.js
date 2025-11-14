@@ -3,7 +3,27 @@ import axios from 'axios'
 // 创建axios实例
 const api = axios.create({
   baseURL: '/api', // 使用nginx代理
-  timeout: 10000
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json;charset=UTF-8',
+    'Accept': 'application/json;charset=UTF-8'
+  },
+  // 确保请求和响应都使用正确的字符编码
+  transformRequest: [function (data, headers) {
+    headers['Content-Type'] = 'application/json;charset=UTF-8'
+    return data
+  }],
+  transformResponse: [function (data) {
+    // 尝试处理响应数据的字符编码问题
+    if (typeof data === 'string') {
+      try {
+        return JSON.parse(data)
+      } catch (e) {
+        return data
+      }
+    }
+    return data
+  }]
 })
 
 // 请求拦截器

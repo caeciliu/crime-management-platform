@@ -15,18 +15,18 @@ public class CrimeEvent {
 
     @NotBlank(message = "案件标题不能为空")
     @Size(min = 5, max = 200, message = "案件标题长度必须在5-200个字符之间")
-    @Column(nullable = false)
+    @Column(nullable = false, length = 200, columnDefinition = "VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL")
     private String title;
 
     @NotBlank(message = "案件类型不能为空")
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100, columnDefinition = "VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL")
     private String crimeType;
 
     @NotBlank(message = "案发地点不能为空")
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255, columnDefinition = "VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL")
     private String location;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
     private String description;
 
     @NotNull(message = "案发时间不能为空")
@@ -36,10 +36,10 @@ public class CrimeEvent {
     @Column(name = "report_time")
     private LocalDateTime reportTime;
 
-    @Column(name = "status")
+    @Column(name = "status", length = 50, columnDefinition = "VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '待处理'")
     private String status = "待处理";
 
-    @Column(name = "severity_level")
+    @Column(name = "severity_level", length = 20, columnDefinition = "VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
     private String severityLevel;
 
     @Column(name = "created_at", updatable = false)

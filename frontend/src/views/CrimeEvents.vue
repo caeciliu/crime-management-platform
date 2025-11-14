@@ -141,46 +141,52 @@
         </div>
 
         <div class="table-container">
-          <el-table :data="events" v-loading="loading" class="data-table">
-            <el-table-column prop="id" label="案件编号" width="140" />
-            <el-table-column prop="crimeType" label="犯罪类型" width="120">
+          <el-table :data="events" v-loading="loading" class="data-table" stripe border>
+            <el-table-column prop="id" label="案件编号" width="85" align="center" />
+            <el-table-column prop="title" label="案件标题" min-width="120" show-overflow-tooltip />
+            <el-table-column prop="crimeType" label="犯罪类型" width="90" align="center">
               <template #default="scope">
-                <span class="crime-type-tag" :class="getCrimeTypeClass(scope.row.crimeType)">
+                <el-tag :type="getCrimeTypeTagType(scope.row.crimeType)" size="small">
                   {{ scope.row.crimeType }}
-                </span>
+                </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="incidentTime" label="时间" width="160">
+            <el-table-column prop="incidentTime" label="案发时间" width="140" align="center">
               <template #default="scope">
                 {{ formatDateTime(scope.row.incidentTime) }}
               </template>
             </el-table-column>
-            <el-table-column prop="location" label="地点" width="180" />
-            <el-table-column prop="severityLevel" label="严重程度" width="100">
+            <el-table-column prop="location" label="案发地点" min-width="120" show-overflow-tooltip />
+            <el-table-column prop="severityLevel" label="严重程度" width="80" align="center">
               <template #default="scope">
-                <span class="severity-badge" :class="getSeverityClass(scope.row.severityLevel)">
+                <el-tag :type="getSeverityTagType(scope.row.severityLevel)" size="small">
                   {{ scope.row.severityLevel }}
-                </span>
+                </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="status" label="状态" width="100">
+            <el-table-column prop="status" label="状态" width="80" align="center">
               <template #default="scope">
-                <span class="status-badge" :class="getStatusClass(scope.row.status)">
+                <el-tag :type="getStatusTagType(scope.row.status)" size="small">
                   {{ scope.row.status }}
-                </span>
+                </el-tag>
               </template>
             </el-table-column>
-            <el-table-column label="操作" width="180" fixed="right">
+            <el-table-column label="操作" width="185" align="center">
               <template #default="scope">
-                <el-button size="small" class="action-btn" @click="viewEvent(scope.row)">
-                  详情
-                </el-button>
-                <el-button size="small" class="action-btn" @click="editEvent(scope.row)">
-                  编辑
-                </el-button>
-                <el-button size="small" type="danger" class="action-btn" @click="confirmDelete(scope.row)">
-                  删除
-                </el-button>
+                <div class="action-buttons">
+                  <el-button size="small" type="primary" link @click="viewEvent(scope.row)">
+                    <el-icon><View /></el-icon>
+                    详情
+                  </el-button>
+                  <el-button size="small" type="warning" link @click="editEvent(scope.row)">
+                    <el-icon><Edit /></el-icon>
+                    编辑
+                  </el-button>
+                  <el-button size="small" type="danger" link @click="confirmDelete(scope.row)">
+                    <el-icon><Delete /></el-icon>
+                    删除
+                  </el-button>
+                </div>
               </template>
             </el-table-column>
           </el-table>
@@ -312,13 +318,13 @@
 
 <script>
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus, Search, Refresh, View, Edit, Delete, Setting, Download, Map } from '@element-plus/icons-vue'
+import { Plus, Search, Refresh, View, Edit, Delete, Setting, Download } from '@element-plus/icons-vue'
 import crimeEventService from '../services/crimeEventService'
 
 export default {
   name: 'CrimeEvents',
   components: {
-    Plus, Search, Refresh, View, Edit, Delete, Setting, Download, Map
+    Plus, Search, Refresh, View, Edit, Delete, Setting, Download
   },
   data() {
     return {
@@ -888,7 +894,7 @@ export default {
 }
 
 .table-container {
-  overflow-x: auto;
+  width: 100%;
 }
 
 .data-table :deep(.el-table__header) {
@@ -1126,5 +1132,92 @@ export default {
 
 :deep(.el-loading-mask) {
   border-radius: 0.5rem;
+}
+
+/* 操作按钮样式 */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+}
+
+.action-buttons .el-button {
+  margin: 0 !important;
+  padding: 4px 8px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  min-width: auto;
+}
+
+.action-buttons .el-button .el-icon {
+  margin-right: 2px;
+}
+
+/* 表格样式优化 */
+:deep(.el-table) {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1);
+  width: 100%;
+  table-layout: fixed;
+}
+
+:deep(.el-table__header-wrapper) {
+  background-color: #f8fafc;
+}
+
+:deep(.el-table__header) {
+  background-color: #f8fafc;
+  color: #374151;
+  font-weight: 600;
+}
+
+:deep(.el-table__header th) {
+  background-color: #f8fafc !important;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 8px 6px;
+}
+
+:deep(.el-table__row) {
+  transition: background-color 0.2s ease;
+}
+
+:deep(.el-table__row:hover) {
+  background-color: #f8fafc !important;
+}
+
+:deep(.el-table__body td) {
+  padding: 8px 6px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* 标签样式优化 */
+:deep(.el-tag) {
+  border-radius: 0.25rem;
+  font-weight: 500;
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
+:deep(.el-tag--small) {
+  height: auto;
+  line-height: 1.4;
+}
+
+/* 链接按钮样式 */
+:deep(.el-button.is-link) {
+  border: none;
+  background: transparent;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+:deep(.el-button.is-link:hover) {
+  background: rgba(64, 158, 255, 0.1);
 }
 </style>

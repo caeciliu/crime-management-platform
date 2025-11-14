@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # MySQL数据库服务
   db:
@@ -13,7 +11,7 @@ services:
       MYSQL_PASSWORD: crime_pass
       MYSQL_CHARSET: utf8mb4
       MYSQL_COLLATION: utf8mb4_unicode_ci
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --init-connect="SET NAMES utf8mb4" --skip-character-set-client-handshake
     ports:
       - "3306:3306"
     volumes:
@@ -22,7 +20,6 @@ services:
     networks:
       - crime-network
 
-  
   # Spring Boot后端服务
   backend:
     build:
@@ -33,10 +30,13 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/crime_management_db?useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/crime_management_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: crime_user
       SPRING_DATASOURCE_PASSWORD: crime_pass
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      JAVA_TOOL_OPTIONS: "-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Shanghai"
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
     depends_on:
       - db
     networks:

@@ -18,7 +18,7 @@
     </main>
 
     <footer>
-      <p>&copy; 2023 城市犯罪事件管理平台. 所有权利保留.</p>
+      <p>&copy; 2025 城市犯罪事件管理平台. 所有权利保留.</p>
     </footer>
   </div>
 </template>

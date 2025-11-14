@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/crime-events")
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:80", "http://localhost:3000", "http://127.0.0.1:80", "http://127.0.0.1:3000"}, maxAge = 3600, allowCredentials = "true")
 public class CrimeEventController {
 
     @Autowired
@@ -107,5 +107,21 @@ public class CrimeEventController {
         response.put("status", "UP");
         response.put("message", "犯罪事件管理服务运行正常");
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/test-db")
+    public ResponseEntity<Map<String, Object>> testDatabaseConnection() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            long count = crimeEventService.countAllEvents();
+            response.put("status", "SUCCESS");
+            response.put("message", "数据库连接正常");
+            response.put("totalEvents", count);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("status", "ERROR");
+            response.put("message", "数据库连接失败: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
     }
 }

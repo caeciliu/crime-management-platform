@@ -187,3 +187,4 @@ Thumbs.db
 # Application specific
 application-*.properties
 !application.properties
+backend/Dockerfile
